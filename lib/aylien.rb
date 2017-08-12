@@ -15,11 +15,13 @@ module Aylien
   def set_opts(interests)
     {
       :text => "#{interests}",
-      :published_at_start => "NOW-7DAYS",
-      :published_at_end => "NOW",
-      :language => ["en"],
-      :sort_by => "hotness",
-      :per_page => 1
+      :published_at_start => 'NOW-5DAYS',
+      :published_at_end => 'NOW',
+      :language => ['en'],
+      :per_page => 10,
+      :sort_by => 'hotness',
+      :source_locations_country => ['US'],
+      :_return => ['title', 'body', 'summary', 'source', 'author', 'keywords', 'hashtags', 'social_shares_count', 'media', 'sentiment', 'links']
     }
   end
 
@@ -29,7 +31,7 @@ module Aylien
     api_instance = AylienNewsApi::DefaultApi.new
     begin
         #List stories
-      results = api_instance.list_stories(opts)
+      api_instance.list_stories(opts)
       # byebug
       # puts result
     rescue AylienNewsApi::ApiError => e

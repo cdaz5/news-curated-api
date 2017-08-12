@@ -9,14 +9,19 @@ class Api::V1::AuthController < ApplicationController
   end
 
   def create
+    # byebug
     # see if there is a user with this username
      user = User.find_by(email: params[:email])
+    #  byebug
      # if the is, make sure that they have the correct password
      if user.present? && user.authenticate(params[:password])
        # if they do, render back a json response of the user info
        # issue token
-       created_jwt = issue_token({id: user.id})
-       render json: {email: user.email, jwt: created_jwt}
+       created_jwt = issue_token({
+         id: user.id,
+         email: user.email
+         })
+       render json: {id: user.id, email: user.email, jwt: created_jwt}
      else
        # otherwise, render back some error response
        render json: {
