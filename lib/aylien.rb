@@ -12,27 +12,29 @@ module Aylien
   end
 
 
-  def set_opts(interests)
+  def set_opts(interests, next_page_cursor='*')
     {
       :text => "#{interests}",
       :published_at_start => 'NOW-5DAYS',
       :published_at_end => 'NOW',
       :language => ['en'],
-      :per_page => 10,
       :sort_by => 'hotness',
       :source_locations_country => ['US'],
-      :_return => ['title', 'body', 'summary', 'source', 'author', 'keywords', 'hashtags', 'social_shares_count', 'media', 'sentiment', 'links']
+      :_return => ['title', 'body', 'summary', 'source', 'author', 'keywords', 'hashtags', 'social_shares_count', 'media', 'sentiment', 'links'],
+      :cursor => "#{next_page_cursor}",
+      :per_page => 10
     }
+
   end
 
-  def fetch_user_articles(interests)
-    opts = set_opts(interests)
+  def fetch_user_articles(interests, next_page_cursor)
+    opts = set_opts(interests, next_page_cursor)
       #List stories
+      # byebug
     api_instance = AylienNewsApi::DefaultApi.new
     begin
         #List stories
       api_instance.list_stories(opts)
-      # byebug
       # puts result
     rescue AylienNewsApi::ApiError => e
       puts "Exception when calling DefaultApi->list_stories: #{e}"

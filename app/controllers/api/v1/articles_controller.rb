@@ -4,9 +4,14 @@ class Api::V1::ArticlesController < ApplicationController
   include Aylien
 
   def fetch_articles
+    # byebug
+    if params['nextPageCursor'] == ""
+      params['nextPageCursor'] = "*"
+    end
+    # byebug
     user = User.find_by(email: current_user.email)
-    articles = fetch_user_articles(user.interests)
-
+    articles = fetch_user_articles(user.interests, params['nextPageCursor'])
+    # byebug
     render json: articles
   end
 
@@ -25,6 +30,6 @@ class Api::V1::ArticlesController < ApplicationController
 private
 
   def article_params
-    params.permit(:article, :permalink, :title, :body, :summary, :media_img_url, :source_name, :author, :keywords, :hashtags, :facebook_shares, :linkedin_shares, :related_stories_api_call, :sentiment_polarity, :sentiment_score)
+    params.permit(:nextPageCursor, :article, :permalink, :title, :body, :summary, :media_img_url, :source_name, :author, :keywords, :hashtags, :facebook_shares, :linkedin_shares, :related_stories_api_call, :sentiment_polarity, :sentiment_score)
   end
 end
