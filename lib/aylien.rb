@@ -5,10 +5,10 @@ module Aylien
 # Setup authorization
   AylienNewsApi.configure do |config|
     # Configure API key authorization: app_id
-    config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = 'dd169040'
+    config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = ''
 
     # Configure API key authorization: app_key
-    config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = 'ae7b0c0864fc3a6e0b80c34776ad59a8'
+    config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = ''
   end
 
 
