@@ -2,6 +2,12 @@ require 'aylien_news_api'
 class Api::V1::ArticlesController < ApplicationController
   before_action :authorize_user!, only: [:fetch_articles, :save_article]
   include Aylien
+  require 'twitter'
+  # include Twitter
+    # config.consumer_key        = "1BsgleMjPVS0fWEw7zjOgARtw"
+    # config.consumer_secret     = "es12GriRTKzFTgoWVBBBGroBmE6YX2jLNy1L6LhNKn828kS8yL"
+    # config.access_token        = "896397567067643904-RAb4arG3eIRSW3gFNyQ1UGK3RfR0iP6"
+    # config.access_token_secret = "4hQGGAbUf6N0Q1AcAIHt6jVqz5X93AnZdkysvJohVS4eD"
 
   def fetch_articles
     # byebug
@@ -15,8 +21,56 @@ class Api::V1::ArticlesController < ApplicationController
     render json: articles
   end
 
+  def fetch_tweets
+    hashtags = params['hashtags']
+    # byebug
+    all_tweets = $twitter.search(hashtags, {result_type: 'recent', lang: 'en', count: 25}).map do |tweet|
+      # byebug
+      {
+        id: tweet.id,
+        name: tweet.user.name,
+        screen_name: tweet.user.screen_name,
+        profile_image_url: tweet.user.profile_image_url,
+        text: tweet.text,
+        created_at: tweet.created_at,
+        favorite_count: tweet.favorite_count,
+        retweet_count: tweet.retweet_count,
+        media: tweet.media? ? tweet.media[0].media_url : '',
+        urls: tweet.urls,
+        user_mentions: tweet.user_mentions,
+        hashtags: tweet.hashtags,
+        symbols: tweet.symbols,
+        url: tweet.url
+        }
+    end
+    # byebug
+    render json: all_tweets
+  end
+
+  def fetch_sentiment
+    # byebug
+    article_ids = params['articles'].map do |article|
+      article['id']
+    end
+    sentiment_trends = fetch_sentiment_data(article_ids)
+
+    render json: sentiment_trends
+  end
+
+  def fetch_trends
+    # byebug
+    article_ids = params['articles'].map do |article|
+      article['id']
+    end
+    # user = User.find_by(email: current_user.email)
+    keyword_trends = fetch_saved_article_trends(article_ids)
+
+    render json: keyword_trends
+  end
+
   def save_article
     user = User.find_by(email: current_user.email)
+    # byebug
     saved_article = SavedArticle.new(article_params)
     saved_article.user_id = user.id
 
@@ -30,6 +84,6 @@ class Api::V1::ArticlesController < ApplicationController
 private
 
   def article_params
-    params.permit(:nextPageCursor, :article, :permalink, :title, :body, :summary, :media_img_url, :source_name, :author, :keywords, :hashtags, :facebook_shares, :linkedin_shares, :related_stories_api_call, :sentiment_polarity, :sentiment_score)
+    params.permit(:aylien_id, :nextPageCursor, :article, :permalink, :title, :body, :summary, :media_img_url, :source_name, :author, :keywords, :hashtags, :facebook_shares, :linkedin_shares, :related_stories_api_call, :sentiment_polarity, :sentiment_score)
   end
 end

@@ -20,11 +20,54 @@ module Aylien
       :language => ['en'],
       :sort_by => 'hotness',
       :source_locations_country => ['US'],
-      :_return => ['title', 'body', 'summary', 'source', 'author', 'keywords', 'hashtags', 'social_shares_count', 'media', 'sentiment', 'links'],
+      :_return => ['id', 'title', 'body', 'summary', 'source', 'author', 'keywords', 'hashtags', 'social_shares_count', 'media', 'sentiment', 'links'],
       :cursor => "#{next_page_cursor}",
       :per_page => 10
     }
+  end
 
+  def set_sentiment_opts(article_ids)
+    {
+      :id => article_ids,
+      :published_at_start => 'NOW-5DAYS',
+      :published_at_end => 'NOW',
+      :source_locations_country => ['US'],
+    }
+  end
+
+  def set_trends_opts(article_ids)
+    {
+      :id => article_ids,
+      :published_at_start => 'NOW-5DAYS',
+      :published_at_end => 'NOW',
+      :source_locations_country => ['US'],
+    }
+  end
+
+  def fetch_sentiment_data(article_ids)
+    opts = set_sentiment_opts(article_ids)
+    api_instance = AylienNewsApi::DefaultApi.new
+    begin
+      #List trends
+      # byebug
+    api_instance.list_trends('sentiment.body.polarity', opts)
+    # p result
+    rescue AylienNewsApi::ApiError => e
+    puts "Exception when calling DefaultApi->list_trends: #{e}"
+    end
+  end
+
+  def fetch_saved_article_trends(article_ids)
+    opts = set_trends_opts(article_ids)
+    api_instance = AylienNewsApi::DefaultApi.new
+    begin
+      #List trends
+      # byebug
+    api_instance.list_trends('keywords', opts)
+    # p result
+    rescue AylienNewsApi::ApiError => e
+    puts "Exception when calling DefaultApi->list_trends: #{e}"
+    end
   end
 
   def fetch_user_articles(interests, next_page_cursor)
