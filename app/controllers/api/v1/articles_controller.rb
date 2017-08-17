@@ -1,13 +1,8 @@
 require 'aylien_news_api'
 class Api::V1::ArticlesController < ApplicationController
-  before_action :authorize_user!, only: [:fetch_articles, :save_article]
+  before_action :authorize_user!, only: [:fetch_articles, :save_article, :fetch_tweets, :fetch_sentiment, :fetch_trends]
   include Aylien
   require 'twitter'
-  # include Twitter
-    # config.consumer_key        = "1BsgleMjPVS0fWEw7zjOgARtw"
-    # config.consumer_secret     = "es12GriRTKzFTgoWVBBBGroBmE6YX2jLNy1L6LhNKn828kS8yL"
-    # config.access_token        = "896397567067643904-RAb4arG3eIRSW3gFNyQ1UGK3RfR0iP6"
-    # config.access_token_secret = "4hQGGAbUf6N0Q1AcAIHt6jVqz5X93AnZdkysvJohVS4eD"
 
   def fetch_articles
     # byebug

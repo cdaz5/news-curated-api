@@ -5,10 +5,10 @@ module Aylien
 # Setup authorization
   AylienNewsApi.configure do |config|
     # Configure API key authorization: app_id
-    config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = ''
+    config.api_key['X-AYLIEN-NewsAPI-Application-ID'] = 'dd169040'
 
     # Configure API key authorization: app_key
-    config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = ''
+    config.api_key['X-AYLIEN-NewsAPI-Application-Key'] = 'ae7b0c0864fc3a6e0b80c34776ad59a8'
   end
 
 
@@ -18,7 +18,7 @@ module Aylien
       :published_at_start => 'NOW-5DAYS',
       :published_at_end => 'NOW',
       :language => ['en'],
-      :sort_by => 'hotness',
+      :sort_by => 'relevance',
       :source_locations_country => ['US'],
       :_return => ['id', 'title', 'body', 'summary', 'source', 'author', 'keywords', 'hashtags', 'social_shares_count', 'media', 'sentiment', 'links'],
       :cursor => "#{next_page_cursor}",

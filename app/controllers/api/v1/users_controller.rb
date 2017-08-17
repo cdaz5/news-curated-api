@@ -2,17 +2,15 @@ class Api::V1::UsersController < ApplicationController
   before_action :authorize_user!, only: [:edit, :user_saved_articles, :delete_user_saved_article]
 
   def create
-    user = User.new(user_params)
-
-    if user.valid?
-      user.save
+    if !User.find_by(email: params[:email])
+      user = User.create(user_params)
       created_jwt = issue_token({
         id: user.id,
         email: user.email
         })
       render json: {id: user.id, email: user.email, jwt: created_jwt}
     else
-      render json: {errors: user.errors.full_messages}
+      render json: {error: 'Email Already Exists'}
     end
   end
 
