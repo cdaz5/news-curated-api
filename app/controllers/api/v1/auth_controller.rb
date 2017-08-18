@@ -24,9 +24,7 @@ class Api::V1::AuthController < ApplicationController
        render json: {id: user.id, email: user.email, jwt: created_jwt}
      else
        # otherwise, render back some error response
-       render json: {
-         error: 'Username or password incorrect'
-       }, status: 422
+       render json: { error: ['Invaid Email or Password'] }, status: 422
      end
   end
 
