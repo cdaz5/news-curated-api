@@ -13,7 +13,7 @@ class Api::V1::UsersController < ApplicationController
           id: user.id,
           email: user.email
           })
-        render json: {id: user.id, email: user.email, jwt: created_jwt}
+        render json: {id: user.id, email: user.email, name: user.name, jwt: created_jwt}
       else
         render json: {error: user.errors.full_messages}
       end
