@@ -5,22 +5,17 @@ class Api::V1::ArticlesController < ApplicationController
   require 'twitter'
 
   def fetch_articles
-    # byebug
     if params['nextPageCursor'] == ""
       params['nextPageCursor'] = "*"
     end
-    # byebug
     user = User.find_by(email: current_user.email)
     articles = fetch_user_articles(user.interests, params['nextPageCursor'])
-    # byebug
     render json: articles
   end
 
   def fetch_tweets
     hashtags = params['hashtags']
-    # byebug
     all_tweets = $twitter.search(hashtags, {result_type: 'recent', lang: 'en', count: 25}).map do |tweet|
-      # byebug
       {
         id: tweet.id,
         name: tweet.user.name,
@@ -38,12 +33,10 @@ class Api::V1::ArticlesController < ApplicationController
         url: tweet.url
         }
     end
-    # byebug
     render json: all_tweets
   end
 
   def fetch_sentiment
-    # byebug
     article_ids = params['articles'].map do |article|
       article['id']
     end
@@ -53,11 +46,9 @@ class Api::V1::ArticlesController < ApplicationController
   end
 
   def fetch_trends
-    # byebug
     article_ids = params['articles'].map do |article|
       article['id']
     end
-    # user = User.find_by(email: current_user.email)
     keyword_trends = fetch_saved_article_trends(article_ids)
 
     render json: keyword_trends
@@ -65,7 +56,6 @@ class Api::V1::ArticlesController < ApplicationController
 
   def save_article
     user = User.find_by(email: current_user.email)
-    # byebug
     saved_article = SavedArticle.new(article_params)
     saved_article.user_id = user.id
 

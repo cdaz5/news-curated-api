@@ -23,7 +23,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def edit
-    # byebug
     user = User.find_by(email: current_user.email)
     user.update(interests: params[:interests])
     if user.save
@@ -34,7 +33,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def user_saved_articles
-    # byebug
     user = User.find_by(email: current_user.email)
     if user
       saved_articles = user.saved_articles.all
@@ -45,7 +43,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def delete_user_saved_article
-    # byebug
     user = User.find_by(email: current_user.email)
     article = SavedArticle.find(params[:id])
     article.destroy
